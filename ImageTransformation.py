@@ -37,12 +37,10 @@ class ImageTransformation:
                 io.imsave(self.root+str(angle*i)+'_'+name,m)
             yield m
         
-    def resize1(self, image, name, w=110,h=110):
+    def resize1(self, image, name, w=128,h=128):
         m = resize(image, (w,h), mode='reflect')
-        print('resized shape:')
-        print(m.shape)
         if self.is_save:
-            io.imsave(self.root+str((w,h))+'_'+name,m)
+            io.imsave(self.root+name,m)
         return m
     
     def translation(self, image, name):
@@ -95,18 +93,23 @@ class ImageTransformation:
     def load(self):
         images = io.imread_collection(self.root+'*.jpg')
         
-        i=1
         for (image, fn) in zip(images, images.files):
             name = self.getFileName(fn)
+            print(name)
+            self.resize1(image, name)
+            
 #            for m in self.rescale1(image, name):
 #                for m1 in self.rotate1(m, name):
-#                    io.imsave(self.root +str(i)+'_'+ name, self.resize1(m1, name))
-#                    i+=1
+#                    io.imsave(self.root + name, self.resize1(m1, name))
 #            self.translation(image,name)
-            self.perspective(image,name)
+#            self.perspective(image,name)
+            
+            
 def main():
-    imageTransformation = ImageTransformation(os.getcwd()+'hansalim\\')
+    imageTransformation = ImageTransformation(os.path.join(os.getcwd(),'hansalim\\'), True)
     imageTransformation.load()
+    
+    
 if __name__ == '__main__':
     main()
 
